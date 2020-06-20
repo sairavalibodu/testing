@@ -1,0 +1,184 @@
+Reusable libraries for Selenium Automation Framework:
+======================================================
+Project/Application:
+TestCases(Main Test Scripts)
+	TC01_ApplyLeave(){...}
+	TC02_CancelLeave(){...}
+userLibrary
+	launchApp()
+	loginApp()
+	navMyInfo()
+	navMyLeave()
+	logout()
+
+=======================
+Common:
+---------------------
+Excel.java
+	readCellData()
+	readRowData()
+	readAllRowsData()
+	WriteCellData()
+	compareSheets()
+	compareFiles()
+DB.java
+
+
+XML.java
+
+
+FileSystem.java
+
+
+Utilities.java
+
+WebLibrary.java
+	clickElement()
+	setText()
+	selectItem()
+	verifyItem()
+	verifyAllItems()
+	getElementText()	
+	getAttributeValue()
+	isElementEnabled()
+	isElementSelected()
+	isElementDisplayed()
+=======================================
+
+
+package WebDriver_basics;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+
+public class WebLibrary {
+	
+	//Class variable declaration
+	public static WebDriver driver;	
+	
+	// WebLibrary reusable methods
+	//============================================================================
+	public static boolean launchApp(String strBrowser, String strURL)
+	{
+		boolean bStatus = true;
+		try {
+			String Browser = strBrowser.trim().toUpperCase();
+			switch(Browser)
+			{
+				case "CHROME": 	
+					System.setProperty("webdriver.chrome.driver", "C:\\Users\\91770\\eclipse-workspace\\chromedriver.exe");
+					driver = new ChromeDriver();
+					break;
+				
+				case "FF"	: 	
+					driver = new FirefoxDriver();
+					break;
+				
+				case "IE" 	: 	
+					driver = new InternetExplorerDriver();
+					break;
+					
+				default:
+					System.out.println("Invalid browser name, please try again.");
+					break;
+			}			
+			driver.get(strURL);
+			driver.manage().window().maximize();
+			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);			
+		}
+		
+		catch(Exception e) {
+			bStatus = false;
+		}
+		return bStatus;
+	}
+	//============================================================================
+	public static boolean clickElement(String strxpath)
+	{
+		boolean bStatus = true;
+		try {
+			driver.findElement(By.xpath(strxpath)).click();
+		}
+		
+		catch(Exception e) {
+			bStatus = false;
+		}
+		
+		return bStatus;
+	}
+	//============================================================================
+	public static boolean setEditValue(String strxpath, String strValue)
+	{
+		boolean bStatus = true;
+		try {
+			driver.findElement(By.xpath(strxpath)).sendKeys(strValue);
+		}
+		
+		catch(Exception e) {
+			bStatus = false;
+		}
+		
+		return bStatus;
+	}
+	//============================================================================
+	
+	
+	//============================================================================
+	
+	
+	
+	//===============================End of WebLibrary=============================================
+
+}
+---------------------
+package WebDriver_basics;
+
+public class TestCases extends WebLibrary{	
+	
+	public static void main(String[] args) {
+		
+		boolean retval;
+		retval = launchApp("chrome", "http://testingmasters.com/hrm");
+		if(retval)
+			System.out.println("Application launched");
+		else
+			System.out.println("Application not launched");
+		
+		retval = setEditValue("//input[@id='txtUsername']", "user02");
+		if(retval)
+			System.out.println("Username entered");
+		else
+			System.out.println("Username not entered");
+		
+		
+		retval = setEditValue("//input[@id='txtPassword']", "TM1234");
+		if(retval)
+			System.out.println("Password entered");
+		else
+			System.out.println("Password not entered");
+		
+		
+		retval = clickElement("//input[@id='btnLogin']");
+		if(retval)
+			System.out.println("Login button clicked");
+		else
+			System.out.println("Login button not clicked");
+		
+		
+	}
+
+}
+----------------------------------
+
+
+
+
+
+
+
+
